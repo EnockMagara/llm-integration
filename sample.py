@@ -14,10 +14,25 @@ if not api_key:
 
 client = Together(api_key=api_key)
 
-response = client.chat.completions.create(
-    model="meta-llama/Llama-Vision-Free",
-    messages=[
-        {"role": "user", "content": "What are some fun things to do in New York?"}
-    ],
-)
-print(response.choices[0].message.content)
+def suggest_activity(location):
+    """
+    Suggest activities for a given location.
+    
+    Args:
+        location (str): The location where activities should take place
+    
+    Returns:
+        str: Activity recommendations
+    """
+    response = client.chat.completions.create(
+        model="meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+        messages=[{"role": "user", "content": f"What are some fun things to do in {location}?"}]
+    )
+    return response.choices[0].message.content
+
+# Example usage
+if __name__ == "__main__":
+    location = input("Where would you like to find activities? ")
+    recommendations = suggest_activity(location)
+    print("\nHere are some activities you can do:")
+    print(recommendations)
